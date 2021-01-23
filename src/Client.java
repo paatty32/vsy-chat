@@ -18,7 +18,7 @@ public class Client {
             BufferedReader tastaturIn = new BufferedReader(tastatur);
 
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
-
+            //Test
             //Innere Thread Klasse erstellen, fürs Schreiben
            class WriterThread extends Thread{
                 @Override
