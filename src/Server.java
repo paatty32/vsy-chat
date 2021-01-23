@@ -1,9 +1,14 @@
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.Buffer;
+import java.util.ArrayList;
 
 public class Server implements Runnable{
+
+    public static ArrayList<Socket> clientList = new ArrayList<>();
+
 
     public static void main(String args[]) {
         int port = 2000;
@@ -12,7 +17,8 @@ public class Server implements Runnable{
             System.out.println("Server lauscht auf Port: " + port);
             while(true){
                 Socket clientSocket = serSocket.accept();
-                Thread t = new Thread(new Server(clientSocket));
+                clientList.add(clientSocket);
+                Thread t = new Thread(new Server(clientSocket)); //Für jeden neuen Client wird ein Thread gestartet
                 t.start();
             }
         } catch (IOException ex) {
@@ -21,9 +27,14 @@ public class Server implements Runnable{
         }
 
     }
+
     private Socket clientSocket;
+    //private ArrayList<Socket> clientList = null;
+
     private Server(Socket clientSocket){
+
         this.clientSocket = clientSocket;
+
     }
 
     @Override
@@ -33,7 +44,7 @@ public class Server implements Runnable{
             InputStreamReader socketStream = new InputStreamReader(clientSocket.getInputStream());
             BufferedReader in = new BufferedReader(socketStream);
             System.out.println("TEST");
-            //PrintStream stream = System.out;
+
             PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
 
             String line;
@@ -41,8 +52,15 @@ public class Server implements Runnable{
                 System.out.println("TEST2");
 
                 System.out.println("Server: gelsen vom Client= "+line);
-                writer.println(line);
-                writer.flush();
+
+                for(int i = 0; i < clientList.size(); i++){
+                    PrintWriter writer2 = new PrintWriter(clientList.get(i).getOutputStream());
+                    writer2.println(line);
+                    writer2.flush();
+
+                    System.out.println(clientList.size());
+                }
+
             }
             in.close();
         } catch (IOException e) {
