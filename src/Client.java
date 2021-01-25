@@ -34,9 +34,10 @@ public class Client {
                     while(true){
                         try {
                             if(writer.checkError()){
-                                System.out.println("Verbindung zum Server Unterbrochen, letzte Nachricht ist nicht mehr angekommen");
+                                System.out.println("Verbindung zum Server Unterbrochen, drücke ENTER zu erneuten Aufbau");
                                 break;
                             } else {
+                                System.out.print(">>: ");
                                 writer.println(tastaturIn.readLine());
                                 writer.flush();
                             }
