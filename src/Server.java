@@ -47,11 +47,13 @@ public class Server implements Runnable{
 
             PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
 
+            writer.println("Sie sind Client Nummer: " + clientList.size());
+
             String line;
             while((line = in.readLine()) != null){
                 System.out.println("TEST2");
 
-                System.out.println("Server: gelsen vom Client= "+line);
+                System.out.println("gelsen vom Client= "+line);
 
                 for(int i = 0; i < clientList.size(); i++){
                     PrintWriter writer2 = new PrintWriter(clientList.get(i).getOutputStream());

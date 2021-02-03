@@ -1,3 +1,7 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.Timer;
@@ -5,6 +9,15 @@ import java.util.Timer;
 public class Client {
 
     public static void main (String [] args){
+
+        /*
+        JFrame chat = new JFrame();
+        chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JTextArea chatFenster = new JTextArea();
+        JTextField chatSchreibFenster = new JTextField();
+*/
+
         try{
             Socket socket = new Socket("localhost", 2000);
 
@@ -20,11 +33,8 @@ public class Client {
 
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
-            /*
-            Heartbeat heartbeat = new Heartbeat(writer);
-            Timer timer = new Timer();
-            timer.schedule(heartbeat, 0, 2000);
-*/
+
+
             String line;
 
             //Innere Thread Klasse erstellen, fürs Schreiben
@@ -37,7 +47,15 @@ public class Client {
                                 System.out.println("Verbindung zum Server Unterbrochen, drücke ENTER zu erneuten Aufbau");
                                 break;
                             } else {
-                                System.out.print(">>: ");
+                               // String eingabe = tastaturIn.readLine();
+                                /*
+                                chatSchreibFenster.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        chatFenster.append(eingabe);
+                                        chatSchreibFenster.setText("");
+                                    }
+                                }); */
                                 writer.println(tastaturIn.readLine());
                                 writer.flush();
                             }
@@ -51,12 +69,20 @@ public class Client {
 
             WriterThread writerThread = new WriterThread();
             writerThread.start();
+    /*
+            chat.add(BorderLayout.SOUTH, chatSchreibFenster);
+            chat.add(BorderLayout.CENTER, chatFenster);
+
+            chat.setSize(300, 400);
+            chat.setVisible(true);
+            */
 
             while(true){
-                //Schreiben zum Server
+
                 //Lesen vom Server -> es wird nur gelesen, wenn auch etwas drin ist
                 while(((line = in.readLine())!= null)){
-                    System.out.println("Client: gelesen vom Server= " + line);
+                    System.out.println(">>: " + line);
+                  //  chatFenster.append(line);
                 }
                 in.close();
             }
