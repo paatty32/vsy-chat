@@ -4,13 +4,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server implements Runnable{
 
     public static ArrayList<Socket> clientList = new ArrayList<>();
 
+    //history function
+    private static CopyOnWriteArrayList<String> messages=new CopyOnWriteArrayList<String>(new ArrayList<String>());
 
-    public static void main(String args[]) {
+        public static void main(String args[]) {
         int port = 2000;
         try {
             ServerSocket serSocket = new ServerSocket(port);
@@ -34,7 +37,6 @@ public class Server implements Runnable{
     private Server(Socket clientSocket){
 
         this.clientSocket = clientSocket;
-
     }
 
     @Override
@@ -47,11 +49,20 @@ public class Server implements Runnable{
 
             PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
 
+            //history
+            for (String msg : messages) {
+                writer.println(msg);
+            }
+
+            writer.flush();
+
             String line;
             while((line = in.readLine()) != null){
                 System.out.println("TEST2");
 
                 System.out.println("Server: gelsen vom Client= "+line);
+
+                messages.add(line);
 
                 for(int i = 0; i < clientList.size(); i++){
                     PrintWriter writer2 = new PrintWriter(clientList.get(i).getOutputStream());
