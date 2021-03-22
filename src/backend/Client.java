@@ -1,3 +1,5 @@
+package backend;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,6 +9,57 @@ import java.net.Socket;
 import java.util.Timer;
 
 public class Client {
+
+    private InputStreamReader socketStream;
+    private BufferedReader in;
+    private InputStreamReader tastatur;
+    private BufferedReader tastaturIn;
+    private PrintWriter writer;
+    private Socket socket;
+
+    private String host;
+    private int port;
+
+    public Client(String host, int port){
+        this.host = host;
+        this.port = port;
+    }
+
+    public void connect(){
+        try{
+            this.socket = new Socket("localhost", 2000);
+
+            System.out.println("Verbindung war erfolgreich.");
+
+            //Für die Daten die der Client vom Server erhält
+            this.socketStream = new InputStreamReader(socket.getInputStream());
+            this.in = new BufferedReader(socketStream);
+
+            //TODO: Wird vielleicht gar nicht gebraucht
+            //Tastatureingabe
+            this.tastatur = new InputStreamReader(System.in);
+            this.tastaturIn = new BufferedReader(tastatur);
+
+             writer = new PrintWriter(socket.getOutputStream());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writetoServer(String text){
+        writer.println(text);
+        writer.flush();
+    }
+
+    public String recieveFromServer() throws IOException {
+        String line;
+        while((line = this.in.readLine()) != null){
+
+            return line;
+        }
+        return line;
+    }
 
     public static void main (String [] args){
 
