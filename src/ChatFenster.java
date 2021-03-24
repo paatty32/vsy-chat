@@ -1,5 +1,3 @@
-package gui;
-
 import backend.Client;
 
 import javax.swing.*;
@@ -38,13 +36,19 @@ public class ChatFenster implements ActionListener, Runnable {
     }
     public void setFenster(){
         JFrame chat = new JFrame();
+
         chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.chatFenster = new JTextArea();
         this.chatSchreibFenster = new JTextField();
+        JScrollPane scrollPane = new JScrollPane(chatFenster);
+
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
         this.chatSchreibFenster.addActionListener(this);
 
         chat.add(BorderLayout.SOUTH, chatSchreibFenster);
+        //chat.add(BorderLayout.CENTER, scrollPane);
         chat.add(BorderLayout.CENTER, chatFenster);
 
         chat.setSize(300, 400);
@@ -57,6 +61,7 @@ public class ChatFenster implements ActionListener, Runnable {
 
             chatFenster.start();
             //chatFenster.setFenster();
+            /*Thread erzeugen um im Hintergrund lesen zu können */
             Thread thread = new Thread(chatFenster);
             thread.start();
 
