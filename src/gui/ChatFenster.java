@@ -19,31 +19,20 @@ public class ChatFenster implements ActionListener, Runnable {
 
         this.client = client;
 
+
     }
 
-
-    /*Zum lesen*/
-    @Override
-    public void run() {
-        String line = null;
-        while (true) {
-            try {
-                if (((line = client.recieveFromServer()) != null)){
-                    this.chatFenster.append(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void start(){
+        this.client.connect();
+        this.setFenster();
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
         String text = this.chatSchreibFenster.getText();
         client.writetoServer(text);
-        this.chatFenster.append(text);
+        //this.chatFenster.append(text);
         this.chatSchreibFenster.setText("");
 
     }
@@ -66,12 +55,26 @@ public class ChatFenster implements ActionListener, Runnable {
             Client client = new Client("localhost", 2000);
             ChatFenster chatFenster = new ChatFenster(client);
 
-            chatFenster.setFenster();
-            chatFenster.run();
-
+            chatFenster.start();
+            //chatFenster.setFenster();
+            Thread thread = new Thread(chatFenster);
+            thread.start();
 
     }
 
-
+    /*Zum lesen*/
+    @Override
+    public void run() {
+        String line = null;
+        while (true) {
+            try {
+                if (((line = client.recieveFromServer()) != null)){
+                    this.chatFenster.append(line + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

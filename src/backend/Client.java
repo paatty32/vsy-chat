@@ -58,7 +58,7 @@ public class Client {
 
             return line;
         }
-        return line;
+        return "";
     }
 
     public static void main (String [] args){
