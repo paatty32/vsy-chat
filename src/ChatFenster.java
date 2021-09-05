@@ -12,7 +12,8 @@ public class ChatFenster implements ActionListener, Runnable {
 
     JTextArea chatFenster;
     JTextField chatSchreibFenster;
-
+    String name;
+    JFrame chat = new JFrame();
     public ChatFenster(Client client){
 
         this.client = client;
@@ -22,6 +23,7 @@ public class ChatFenster implements ActionListener, Runnable {
 
     public void start(){
         this.client.connect(2000);
+        this.inputNameFrame();
         this.setFenster();
     }
 
@@ -29,13 +31,12 @@ public class ChatFenster implements ActionListener, Runnable {
     public void actionPerformed(ActionEvent e) {
 
         String text = this.chatSchreibFenster.getText();
-        client.writetoServer(text);
-        //this.chatFenster.append(text);
+        client.writetoServer(name + ": " + text);
         this.chatSchreibFenster.setText("");
 
     }
     public void setFenster(){
-        JFrame chat = new JFrame();
+
 
         chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -51,8 +52,33 @@ public class ChatFenster implements ActionListener, Runnable {
         //chat.add(BorderLayout.CENTER, scrollPane);
         chat.add(BorderLayout.CENTER, chatFenster);
 
-        chat.setSize(300, 400);
-        chat.setVisible(true);
+
+    }
+
+    public void inputNameFrame(){
+        JFrame inputName = new JFrame();
+        JTextArea inputNameDialogWindow = new JTextArea();
+        JTextField inputNameTextField = new JTextField();
+
+        inputNameDialogWindow.append("Geben Sie Ihren Namen ein");
+        inputNameTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               name = inputNameTextField.getText();
+
+                chat.setSize(300, 400);
+                chat.setVisible(true);
+
+                inputName.dispose(); //schließen des fensters
+            }
+        });
+
+        inputName.add(BorderLayout.CENTER, inputNameDialogWindow);
+        inputName.add(BorderLayout.SOUTH, inputNameTextField);
+
+        inputName.setSize(200, 200);
+        inputName.setVisible(true);
+
     }
 
     public static void main(String args[]){
