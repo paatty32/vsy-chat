@@ -25,9 +25,9 @@ public class Client {
         this.port = port;
     }
 
-    public void connect(){
+    public void connect(int port){
         try{
-            this.socket = new Socket("localhost", 2000);
+            this.socket = new Socket("localhost", port);
 
             System.out.println("Verbindung war erfolgreich.");
 
@@ -35,17 +35,13 @@ public class Client {
             this.socketStream = new InputStreamReader(socket.getInputStream());
             this.in = new BufferedReader(socketStream);
 
-            //TODO: Wird vielleicht gar nicht gebraucht
-            //Tastatureingabe
-            this.tastatur = new InputStreamReader(System.in);
-            this.tastaturIn = new BufferedReader(tastatur);
-
              writer = new PrintWriter(socket.getOutputStream());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public void writetoServer(String text){
         writer.println(text);
@@ -58,20 +54,16 @@ public class Client {
 
             return line;
         }
+        //Verbinde dich mit dem Backup-Server, wenn keine Nachrichten mehr erhalten werden.
+        if(this.in.readLine() == null){
+            this.connect(2001);
+        }
         return "";
     }
 
     public static void main (String [] args){
 
-        /*
-        JFrame chat = new JFrame();
-        chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JTextArea chatFenster = new JTextArea();
-        JTextField chatSchreibFenster = new JTextField();
-*/
-
-        try{
+       try{
             Socket socket = new Socket("localhost", 2000);
 
             System.out.println("Verbindung war erfolgreich.");

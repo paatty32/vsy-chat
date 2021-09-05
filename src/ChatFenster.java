@@ -21,7 +21,7 @@ public class ChatFenster implements ActionListener, Runnable {
     }
 
     public void start(){
-        this.client.connect();
+        this.client.connect(2000);
         this.setFenster();
     }
 
@@ -60,7 +60,7 @@ public class ChatFenster implements ActionListener, Runnable {
             ChatFenster chatFenster = new ChatFenster(client);
 
             chatFenster.start();
-            //chatFenster.setFenster();
+
             /*Thread erzeugen um im Hintergrund lesen zu können */
             Thread thread = new Thread(chatFenster);
             thread.start();
