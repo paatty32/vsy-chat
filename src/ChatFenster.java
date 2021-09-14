@@ -18,7 +18,6 @@ public class ChatFenster implements ActionListener, Runnable {
 
         this.client = client;
 
-
     }
 
     public void start(){

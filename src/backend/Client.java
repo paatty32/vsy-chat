@@ -39,6 +39,21 @@ public class Client {
 
         } catch (IOException e) {
             e.printStackTrace();
+            //verbinde dich mit dem backupserver
+            try {
+                this.socket = new Socket("localhost", 2001);
+
+                System.out.println("Verbindung war erfolgreich.");
+
+                //Für die Daten die der Client vom Server erhält
+                this.socketStream = new InputStreamReader(socket.getInputStream());
+                this.in = new BufferedReader(socketStream);
+
+                writer = new PrintWriter(socket.getOutputStream());
+
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+              }
         }
     }
 
@@ -54,7 +69,7 @@ public class Client {
 
             return line;
         }
-        //Verbinde dich mit dem Backup-Server, wenn keine Nachrichten mehr erhalten werden.
+        //Verbinde dich mit dem Backup-Server, wenn keine Nachrichten mehr erhalten werden können.
         if(this.in.readLine() == null){
             this.connect(2001);
         }
