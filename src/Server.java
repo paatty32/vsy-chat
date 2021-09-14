@@ -4,11 +4,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server implements Runnable{
 
     public static ArrayList<Socket> clientList = new ArrayList<>();
-
+    //history function
+    private static ArrayList<String> messages=new ArrayList<String>();
 
     public static void main(String args[]) {
         int port = 2000;
@@ -49,11 +51,22 @@ public class Server implements Runnable{
 
             writer.println("Sie sind Client Nummer: " + clientList.size());
 
+            //history
+            //Schicke den Verlauf der Unterhaltung an den neun Client
+            for (String msg : messages) {
+                writer.println(msg);
+            }
+
+            writer.flush();
+
             String line;
             while((line = in.readLine()) != null){
                 System.out.println("TEST2");
 
                 System.out.println("gelsen vom Client= "+line);
+
+                messages.add(line);
+
 
                 for(int i = 0; i < clientList.size(); i++){
                     PrintWriter writer2 = new PrintWriter(clientList.get(i).getOutputStream());
