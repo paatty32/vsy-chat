@@ -1,3 +1,5 @@
+package frontend;
+
 import backend.Client;
 
 import javax.swing.*;
@@ -10,10 +12,10 @@ public class ChatFenster implements ActionListener, Runnable {
 
     private Client client;
 
-    JTextArea chatFenster;
-    JTextField chatSchreibFenster;
-    String name;
-    JFrame chat = new JFrame();
+    private JTextArea chatFenster;
+    private JTextField chatSchreibFenster;
+    private String name;
+    private JFrame chat = new JFrame();
     public ChatFenster(Client client){
 
         this.client = client;
@@ -29,13 +31,13 @@ public class ChatFenster implements ActionListener, Runnable {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        String text = this.chatSchreibFenster.getText();
-        client.writetoServer(name + ": " + text);
+        String nachricht = this.chatSchreibFenster.getText();
+        client.writetoServer(name + ": " + nachricht);
+        //Säubere Eingabefeld
         this.chatSchreibFenster.setText("");
 
     }
     public void setFenster(){
-
 
         chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -56,15 +58,20 @@ public class ChatFenster implements ActionListener, Runnable {
 
     public void inputNameFrame(){
         JFrame inputName = new JFrame();
+
+        //Fenster
         JTextArea inputNameDialogWindow = new JTextArea();
+        //Eingabe Feld
         JTextField inputNameTextField = new JTextField();
 
         inputNameDialogWindow.append("Geben Sie Ihren Namen ein");
+        //innere Klasse
         inputNameTextField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                name = inputNameTextField.getText();
 
+               //bereite beim enter drücken, das Chatfenster vor
                 chat.setSize(300, 400);
                 chat.setVisible(true);
 
@@ -95,7 +102,7 @@ public class ChatFenster implements ActionListener, Runnable {
     /*Zum lesen*/
     @Override
     public void run() {
-        String line = null;
+        String line;
         while (true) {
             try {
                 if (((line = client.recieveFromServer()) != null)){
