@@ -109,7 +109,8 @@ public class ChatFenster implements ActionListener, Runnable {
                     this.chatFenster.append(line + "\n");
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                this.client.connect(2000);
             }
         }
     }
