@@ -51,8 +51,7 @@ public class ChatFenster implements ActionListener, Runnable {
 
         chat.add(BorderLayout.SOUTH, chatSchreibFenster);
         //chat.add(BorderLayout.CENTER, scrollPane);
-        chat.add(BorderLayout.CENTER, chatFenster);
-
+        chat.add(BorderLayout.CENTER, scrollPane);
 
     }
 
@@ -75,6 +74,10 @@ public class ChatFenster implements ActionListener, Runnable {
                 chat.setSize(300, 400);
                 chat.setVisible(true);
 
+                //set caret to input field disable input in output field
+                chatSchreibFenster.requestFocusInWindow();
+                chatFenster.setEditable(false);
+
                 inputName.dispose(); //schließen des fensters
             }
         });
@@ -84,6 +87,10 @@ public class ChatFenster implements ActionListener, Runnable {
 
         inputName.setSize(200, 200);
         inputName.setVisible(true);
+
+        //set caret to input field disable input in output field
+        inputNameTextField.requestFocusInWindow();
+        inputNameDialogWindow.setEditable(false);
 
     }
 
@@ -107,6 +114,8 @@ public class ChatFenster implements ActionListener, Runnable {
             try {
                 if (((line = client.recieveFromServer()) != null)){
                     this.chatFenster.append(line + "\n");
+                    //update scrollPane on line append
+                    this.chatFenster.setCaretPosition(this.chatFenster.getDocument().getLength());
                 }
             } catch (IOException e) {
                 //e.printStackTrace();
